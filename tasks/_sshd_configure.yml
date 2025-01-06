@@ -1,0 +1,16 @@
+---
+# Description : Lock Down Server
+# file : _secure_sshd.yml
+# from : https://github.com/CommanderPaul/raspberry_pi_ansible/blob/master/roles/secure_sshd_config/tasks/main.yml
+
+- name: create sshd_config and set permissions to root/600
+  become: true
+  become_user: "{{ root_user }}"
+  template:
+    src: 'opensshd.j2'
+    dest: '/etc/ssh/sshd_config'
+    mode: '0600'
+    owner: "{{ root_user }}"
+    group: "{{ root_user }}"
+    validate: '{{ sshd_path }} -T -C user=root -C host=localhost -C addr=localhost -C lport=22 -f %s'
+  notify: restart sshd

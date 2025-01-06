@@ -1,0 +1,9 @@
+--- 
+# Restart ssh service
+
+- name: restart sshd
+  become: true
+  become_user: "{{ root_user }}"
+  service:
+    name: ssh
+    state: restarted

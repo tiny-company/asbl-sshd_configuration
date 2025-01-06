@@ -1,0 +1,66 @@
+---
+# file : main.yml
+# description : entrypoint for sshd_configuration role
+
+
+## Asserting
+- name: Checking if sshd_configuration_user for this role is defined
+  ansible.builtin.assert:
+    that:
+      - sshd_configuration_user is defined
+    fail_msg: "'sshd_configuration_user' must be defined"
+    success_msg: "'sshd_configuration_user' is {{ sshd_configuration_user }}"
+
+- name: Checking if user sshd_configuration_user exist on target
+  ansible.builtin.user:
+    name: "{{ sshd_configuration_user }}"
+  check_mode: true
+  register: test_user_exist
+
+- name: Asserting that sshd_configuration_user exist on target
+  ansible.builtin.assert:
+    that:
+      - test_user_exist.state | d('') == 'present'
+    fail_msg: "{{ sshd_configuration_user }} does not exist on target"
+    success_msg: "{{ sshd_configuration_user }} exist on target"
+
+## Gettings and settings vars
+- name: get openssh-version
+  command: ssh -V
+  register: sshd_version_raw
+  changed_when: false
+  check_mode: false
+
+- name: parse openssh-version
+  set_fact:
+    sshd_version: "{{ sshd_version_raw.stderr | regex_replace('.*_([0-9]*.[0-9]).*', '\\1') }}"
+
+## Settings hostkeys, macs, ciphers and kex for sshd
+- name: set default for ssh_host_key_files if not supplied
+  include_tasks: crypto_config/_crypto_hostkeys.yml
+  when: not ssh_host_key_files
+
+- name: set default for ssh_macs if not supplied
+  include_tasks: crypto_config/_crypto_macs.yml
+  when: not ssh_macs
+
+- name: set default for ssh_ciphers if not supplied
+  include_tasks: crypto_config/_crypto_ciphers.yml
+  when: not ssh_ciphers
+
+- name: set default for ssh_kex if not supplied
+  include_tasks: crypto_config/_crypto_kex.yml
+  when: not ssh_kex
+
+## Configure sshd daemon
+- import_tasks: _sshd_configure.yml
+  tags: [_sshd_configure]
+
+## Hardening ssh configuration
+- import_tasks: _sshd_hardening.yml
+  tags: [_sshd_hardening]
+
+## Configure message of the day (after ssh authentication)
+- import_tasks: _motd.yml
+  tags: [_motd]
+

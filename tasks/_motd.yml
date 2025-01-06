@@ -1,0 +1,10 @@
+---
+# Description : Configure Motd for sshd
+# file : _motd.yml
+
+- name: configure motd banner for sshd
+  become: true
+  become_user: "{{ root_user }}"
+  template:
+    src: motd.j2
+    dest: /etc/motd

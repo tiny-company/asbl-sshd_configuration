@@ -1,0 +1,268 @@
+---
+###################################################
+## sshd_configuration role vars
+###################################################
+
+## root username (default is root)
+root_user: root
+
+## default user for running playbook
+default_user: ansible
+
+## user to run this playbook
+sshd_configuration_user: "{{ default_user }}"
+
+sshd_path: /usr/sbin/sshd
+
+## ==================
+## motd
+### message of the day vars
+host_banner: | 
+  █████████████████████████████████████████
+  ██░███░█░▄▄█░▄▄▀█░▄▀█░▄▄▀█▀▄▄▀█░▄▄▀█░▄▄██
+  ██░█░█░█░▄▄█░▄▄▀█░█░█░▀▀▄█░██░█░██░█░▄▄██
+  ██▄▄▄▄▄█▄▄▄█▄▄▄▄█▄▄██▄█▄▄██▄▄██▄██▄█▄▄▄██
+  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+
+## ==================
+## sshd configuration file
+
+### Custom options for SSH daemon configuration file
+sshd_custom_options: []
+
+### sshd configuration
+sshd_permit_root_login: true
+
+### ports on which ssh-server should listen
+ssh_server_ports: ['22']
+
+### true if IPv6 is needed
+network_ipv6_enable: false
+
+### one or more ip addresses, to which ssh-server should listen to. 
+ssh_listen_to: ['0.0.0.0']
+
+### Host keys to look for when starting sshd.
+ssh_host_key_files: []
+
+### Specifies the host key algorithms that the server offers
+ssh_host_key_algorithms: []
+
+### Make sure sshd checks file modes and ownership before accepting logins.
+sshd_strict_modes: true
+
+### Logging
+sshd_syslog_facility: 'AUTH'
+sshd_log_level: 'VERBOSE'
+
+ssh_ciphers: []
+ssh_macs: []
+ssh_kex: []
+
+### specifies the time allowed for successful authentication to the SSH server
+ssh_login_grace_time: 30s
+
+### Specifies  the  maximum  number  of authentication attempts permitted per connection.  Once the number of failures reaches half this value, additional failures are logged.
+ssh_max_auth_retries: 2
+
+### Specifies the maximum number of open sessions permitted from a given connection
+ssh_max_sessions: 10
+
+### maximum number of concurrent unauthenticated connections to the SSH daemon
+ssh_max_startups: '10:30:100'
+
+### true if SSH has PAM support
+ssh_pam_support: true
+
+### false to disable pam authentication.
+ssh_use_pam: true
+
+### specify AuthenticationMethods
+sshd_authenticationmethods: 'publickey'
+
+### If true, password login is allowed
+ssh_server_password_login: false
+
+### disable ChallengeResponseAuthentication
+ssh_challengeresponseauthentication: false
+
+### true if SSH support Kerberos
+ssh_kerberos_support: false
+
+### true if SSH support GSSAPI
+ssh_gssapi_support: false
+
+### if specified, login is disallowed for user names that match one of the patterns.
+# ssh_deny_users: ''
+
+### if specified, login is allowed only for user names that match one of the patterns.
+# ssh_allow_users: ''
+
+### if specified, login is disallowed for users whose primary group or supplementary group list matches one of the patterns.
+# ssh_deny_groups: ''
+
+### if specified, login is allowed only for users whose primary group or supplementary group list matches one of the patterns.
+# ssh_allow_groups: ''
+
+### change default file that contains the public keys that can be used for user authentication.
+# ssh_authorized_keys_file: ''
+
+### specifies the file containing trusted certificate authorities public keys used to sign user certificates.
+# ssh_trusted_user_ca_keys_file: ''
+
+### maximum concurent ssh client
+ssh_client_alive_interval: 300
+ssh_client_alive_count: 3
+
+### Allow SSH Tunnels
+ssh_permit_tunnel: false
+
+### false to disable TCP Forwarding. Set to true to allow TCP Forwarding.
+ssh_allow_tcp_forwarding: 'no'
+
+### false to disable Agent Forwarding. Set to true to allow Agent Forwarding.
+ssh_allow_agent_forwarding: false
+
+### false to disable binding forwarded ports to non-loopback addresses. Set to true to force binding on wildcard address.
+### Set to 'clientspecified' to allow the client to specify which address to bind to.
+ssh_gateway_ports: false
+
+### false to disable X11 Forwarding. Set to true to allow X11 Forwarding.
+ssh_x11_forwarding: false 
+
+### See details at : https://www.man7.org/linux/man-pages/man5/sshd_config.5.html
+ssh_server_permit_environment_vars: 'no'
+# ssh_server_accept_env_vars: ''
+
+### true or value if compression is needed
+ssh_compression: false
+
+### true if DNS resolutions are needed, look up the remote host name, defaults to false from 6.8, see: http://www.openssh.com/txt/release-6.8
+ssh_use_dns: true
+
+### false to disable printing of the MOTD
+ssh_print_motd: true               # sshd
+ssh_print_pam_motd: false           # sshd
+
+### false to disable display of last login information
+ssh_print_last_log: true
+
+### false to disable serving ssh warning banner before authentication is allowed
+ssh_banner: true
+
+### path to file with ssh warning banner
+ssh_banner_path: '/etc/issue.net'
+
+# false to disable distribution version leakage during initial protocol handshake
+ssh_print_debian_banner: false
+
+### true to enable sftp configuration
+sftp_enabled: true
+
+### sftp default umask
+sftp_umask: '0027'
+
+### false to disable sftp chroot
+sftp_chroot: true
+
+### change default sftp chroot location
+sftp_chroot_dir: /home/%u
+
+### list of hashes (containing addresses/subnets and rules) to generate Match Address blocks for
+ssh_server_match_address: false
+
+### list of hashes (containing group and rules) to generate Match Group blocks for
+ssh_server_match_group: false
+
+### list of hashes (containing user and rules) to generate Match User blocks for
+ssh_server_match_user: false
+
+### list of hashes (containing port and rules) to generate Match LocalPort blocks for
+ssh_server_match_local_port: false
+
+## ==================
+## crypto hostkeys configuration
+ssh_host_keys_dir: '/etc/ssh'
+
+## ==================
+## crypto macs configuration
+## See more at : https://docs.ssh.com/manuals/server-admin/44/Ciphers_and_MACs.html
+
+ssh_macs_53_default:
+  - hmac-ripemd160
+  - hmac-sha1
+
+ssh_macs_53_el_6_5_default:
+  - hmac-sha2-512
+  - hmac-sha2-256
+
+ssh_macs_59_default:
+  - hmac-sha2-512
+  - hmac-sha2-256
+  - hmac-ripemd160
+
+ssh_macs_66_default:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - umac-128-etm@openssh.com
+  - hmac-sha2-512
+  - hmac-sha2-256
+
+ssh_macs_76_default:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - umac-128-etm@openssh.com
+  - hmac-sha2-512
+  - hmac-sha2-256
+
+## ==================
+## crypto cipher configuration
+## See more at : https://docs.ssh.com/manuals/server-admin/44/Ciphers_and_MACs.html
+
+ssh_ciphers_53_default:
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+
+ssh_ciphers_66_default:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+
+## ==================
+## crypto kex (key exchange) configuration
+## See more at : https://man7.org/linux/man-pages/man5/ssh_config.5.html
+ssh_kex_59_default:
+  - diffie-hellman-group-exchange-sha256
+
+ssh_kex_66_default:
+  - curve25519-sha256@libssh.org
+  - diffie-hellman-group-exchange-sha256
+
+ssh_kex_80_default:
+  - sntrup4591761x25519-sha512@tinyssh.org
+  - curve25519-sha256@libssh.org
+  - diffie-hellman-group-exchange-sha256
+
+## see more at : https://github.com/dev-sec/ansible-collection-hardening/issues/433
+ssh_kex_85_default:
+  - sntrup761x25519-sha512@openssh.com
+  - curve25519-sha256@libssh.org
+  - diffie-hellman-group-exchange-sha256
+
+## ==================
+## sshd hardening
+
+ssh_server_hardening: false
+
+### DH parameters
+sshd_moduli_file: '/etc/ssh/moduli'
+sshd_moduli_minimum: 2048
+
+### disable CRYPTO_POLICY to take settings from sshd configuration
+### see: https://access.redhat.com/solutions/4410591
+sshd_disable_crypto_policy: true
+

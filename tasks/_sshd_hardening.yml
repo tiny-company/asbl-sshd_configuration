@@ -1,0 +1,29 @@
+# Description : Lock Down Serversshd
+# file : _sshd_hardening.yml
+# from : https://github.com/dev-sec/ansible-ssh-hardening/blob/master/tasks/hardening.yml
+
+- name: check if {{ sshd_moduli_file }} contains weak DH parameters
+  shell: awk '$5 < {{ sshd_moduli_minimum }}' {{ sshd_moduli_file }}
+  register: sshd_register_moduli
+  changed_when: false
+  check_mode: false
+  when: ssh_server_hardening | bool
+
+- name: remove all small primes
+  shell: awk '$5 >= {{ sshd_moduli_minimum }}' {{ sshd_moduli_file }} > {{ sshd_moduli_file }}.new ;
+         [ -r {{ sshd_moduli_file }}.new -a -s {{ sshd_moduli_file }}.new ] && mv {{ sshd_moduli_file }}.new {{ sshd_moduli_file }} || true
+  notify: restart sshd
+  when:
+    - ssh_server_hardening | bool
+    - sshd_register_moduli.stdout
+
+- name: disable SSH server CRYPTO_POLICY
+  copy:
+    src: sshd
+    dest: /etc/sysconfig/sshd
+    owner: 'root'
+    group: 'root'
+    mode: '0640'
+  when:
+    - sshd_disable_crypto_policy | bool
+    - ('crypto-policies' in ansible_facts.packages)
