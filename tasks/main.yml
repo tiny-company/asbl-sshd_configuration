@@ -12,12 +12,16 @@
     success_msg: "'sshd_configuration_user' is {{ sshd_configuration_user }}"
 
 - name: Checking if user sshd_configuration_user exist on target
+  become: true
+  become_user: "{{ root_user }}"
   ansible.builtin.user:
     name: "{{ sshd_configuration_user }}"
   check_mode: true
   register: test_user_exist
 
 - name: Asserting that sshd_configuration_user exist on target
+  become: true
+  become_user: "{{ root_user }}"
   ansible.builtin.assert:
     that:
       - test_user_exist.state | d('') == 'present'

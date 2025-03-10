@@ -7,7 +7,7 @@
 root_user: root
 
 ## default user for running playbook
-default_user: ansible
+default_user: root
 
 ## user to run this playbook
 sshd_configuration_user: "{{ default_user }}"
@@ -17,12 +17,12 @@ sshd_path: /usr/sbin/sshd
 ## ==================
 ## motd
 ### message of the day vars
-host_banner: | 
-  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-  █▄▄░▄▄██▄██░▄▄▀█░██░████▀▄▀█▀▄▄▀█░▄▀▄░█▀▄▄▀█░▄▄▀█░▄▄▀█░██░
-  ███░████░▄█░██░█░▀▀░█▄▄█░█▀█░██░█░█▄█░█░▀▀░█░▀▀░█░██░█░▀▀░
-  ███░███▄▄▄█▄██▄█▀▀▀▄█████▄███▄▄██▄███▄█░████▄██▄█▄██▄█▀▀▀▄
-  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+# host_banner: | 
+#   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+#   █▄▄░▄▄██▄██░▄▄▀█░██░████▀▄▀█▀▄▄▀█░▄▀▄░█▀▄▄▀█░▄▄▀█░▄▄▀█░██░
+#   ███░████░▄█░██░█░▀▀░█▄▄█░█▀█░██░█░█▄█░█░▀▀░█░▀▀░█░██░█░▀▀░
+#   ███░███▄▄▄█▄██▄█▀▀▀▄█████▄███▄▄██▄███▄█░████▄██▄█▄██▄█▀▀▀▄
+#   ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 
 
 ## ==================
@@ -32,7 +32,7 @@ host_banner: |
 sshd_custom_options: []
 
 ### sshd configuration
-sshd_permit_root_login: true
+sshd_permit_root_login: false
 
 ### ports on which ssh-server should listen
 ssh_server_ports: ['22']
@@ -40,7 +40,7 @@ ssh_server_ports: ['22']
 ### true if IPv6 is needed
 network_ipv6_enable: false
 
-### one or more ip addresses, to which ssh-server should listen to. 
+### one or more ip addresses, to which ssh-server should listen to.
 ssh_listen_to: ['0.0.0.0']
 
 ### Host keys to look for when starting sshd.
@@ -129,7 +129,7 @@ ssh_allow_agent_forwarding: false
 ssh_gateway_ports: false
 
 ### false to disable X11 Forwarding. Set to true to allow X11 Forwarding.
-ssh_x11_forwarding: false 
+ssh_x11_forwarding: false
 
 ### See details at : https://www.man7.org/linux/man-pages/man5/sshd_config.5.html
 ssh_server_permit_environment_vars: 'no'
